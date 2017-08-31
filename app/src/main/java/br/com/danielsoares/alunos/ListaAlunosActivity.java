@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import br.com.danielsoares.EnvioAlunosTask;
+import br.com.danielsoares.WebClient;
 import br.com.danielsoares.adapter.AlunosAdapter;
+import br.com.danielsoares.converter.AlunoConverter;
 import br.com.danielsoares.dao.AlunoDAO;
 import br.com.danielsoares.model.Aluno;
 
@@ -35,6 +39,10 @@ public class ListaAlunosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_alunos);
 
         listaAlunos = (ListView) findViewById(R.id.lista_alunos);
+
+        if(ActivityCompat.checkSelfPermission(ListaAlunosActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ListaAlunosActivity.this, new String[]{Manifest.permission.RECEIVE_SMS}, 456);
+        }
 
         listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,6 +74,22 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
         AlunosAdapter adapter = new AlunosAdapter(this, alunos);
         listaAlunos.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_alunos,  menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_enviar_notas:
+                new EnvioAlunosTask(this).execute();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

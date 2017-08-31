@@ -3,7 +3,8 @@
     package="br.com.danielsoares.alunos">
 
     <uses-permission android:name="android.permission.CALL_PHONE"  />
-    
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,6 +31,12 @@
         <activity android:name=".FormularioActivity">
 
         </activity>
+        <receiver android:name="br.com.danielsoares.receiver.SMSReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
